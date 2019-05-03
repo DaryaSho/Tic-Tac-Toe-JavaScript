@@ -1,7 +1,9 @@
+*{
+    text-align: center;
+}
 table {
     border-collapse:collapse;
 }
-
 td {
 	border: 3px solid black;
 	font-size:80px;
