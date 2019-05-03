@@ -61,7 +61,7 @@ function turn(i,j){
             alert('Win '+player);
             window.location.reload();
         }
-        if(count==N_SIZE*N_SIZE) {
+        else if(count==N_SIZE*N_SIZE) {
             alert('New Game');  
             window.location.reload();
         }
@@ -75,17 +75,19 @@ function turn(i,j){
  */
 function checkWin(a){  
     countG=0; 
+    countG1=0;
     for(var i = 0; i < N_SIZE ; i++){
         countV=0;
         countH=0;
         if(boxes[i][i]===a)countG++;
+        if(boxes[i][N_SIZE-1-i]===a)countG1++;
         for(var j = 0; j<N_SIZE;j++){
             if (boxes[i][j]===a) countV++;
             if (boxes[j][i]===a) countH++;
-        }
+        }       
         if(countH==N_SIZE||countV==N_SIZE)return true;
     }
-   if(countG==N_SIZE) return true; 
+   if(countG==N_SIZE||countG1==N_SIZE) return true; 
     return false; 
 }
 
