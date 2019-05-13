@@ -1,29 +1,29 @@
 "use strict";
-var size = 5,
+var sizeSquare = 3,
     player = 'X',
     boxes = [],
-    count = { countH: 0, countG: 0, countG1: 0, countG: 0, all: 0 };
+    number = { ofHorizont: 0, ofVertical: 0, oflDiagonal1: 0, ofDiagonal: 0, ofFilled: 0 };
 
 newGame();
 
 function newGame() {
-    size = prompt('Size', 3);
+    sizeSquare = prompt('Field size', 3);
     showTable();
 }
 
 function showTable() {
     boxes = [
-        [size],
-        [size]
+        [sizeSquare],
+        [sizeSquare]
     ];
     var table = document.createElement('table');
     table.setAttribute('border', 1);
     table.setAttribute('cellspacing', 0);
-    for (var i = 0; i < size; i++) {
+    for (var i = 0; i < sizeSquare; i++) {
         boxes[i] = [];
         var row = document.createElement('tr');
         table.appendChild(row);
-        for (var j = 0; j < size; j++) {
+        for (var j = 0; j < sizeSquare; j++) {
             var cell = document.createElement('td');
             cell.classList.add(i, j);
             cell.addEventListener('click', record);
@@ -33,7 +33,6 @@ function showTable() {
     }
     document.getElementById("tictactoe").appendChild(table);
 }
-
 
 function record() {
     var cell = event.target;
@@ -51,14 +50,14 @@ function readingClassList(arr) {
 
 function turn(i, j) {
     if (boxes[i][j] === null) {
-        count.all++;
+        number.ofFilled++;
         boxes[i][j] = player === 'X' ? 'X' : 'O';
         event.target.style.background = player === 'X' ? 'green' : 'red';
         event.target.textContent = player === 'X' ? 'X' : 'O';
         if (checkWin(player)) {
             alert('Win ' + player);
             window.location.reload();
-        } else if (count.all == size * size) {
+        } else if (number.ofFilled == sizeSquare * sizeSquare) {
             alert('New Game');
             window.location.reload();
         }
@@ -69,19 +68,19 @@ function turn(i, j) {
 }
 
 function checkWin(player) {
-    count.countG = 0;
-    count.countG1 = 0;
-    for (var i = 0; i < size; i++) {
-        count.countH = 0;
-        count.countV = 0;
-        if (boxes[i][i] === player) count.countG++;
-        if (boxes[i][size - 1 - i] === player) count.countG1++;
-        for (var j = 0; j < size; j++) {
-            if (boxes[i][j] === player) count.countV++;
-            if (boxes[j][i] === player) count.countH++;
+    number.ofDiagonal = 0;
+    number.ofDiagonal1 = 0;
+    for (var i = 0; i < sizeSquare; i++) {
+        number.ofHorizont = 0;
+        number.ofVertical = 0;
+        if (boxes[i][i] === player) number.ofDiagonal++;
+        if (boxes[i][sizeSquare - 1 - i] === player) number.ofDiagonal1++;
+        for (var j = 0; j < sizeSquare; j++) {
+            if (boxes[i][j] === player) number.ofVertical++;
+            if (boxes[j][i] === player) number.ofHorizont++;
         }
-        if (count.countH == size || count.countV == size) return true;
+        if (number.ofHorizont == sizeSquare || number.ofVertical == sizeSquare) return true;
     }
-    if (count.countG == size || count.countG1 == size) return true;
+    if (number.ofDiagonal == sizeSquare || number.ofDiagonal1 == sizeSquare) return true;
     return false;
 }
