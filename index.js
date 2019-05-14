@@ -2,12 +2,12 @@
 var sizeSquare = 3,
     player = 'X',
     boxes = [],
-    number = { ofHorizont: 0, ofVertical: 0, oflDiagonal1: 0, ofDiagonal: 0, ofFilled: 0 };
+    filled = 0;
 
 newGame();
 
 function newGame() {
-    sizeSquare = prompt('Field size', 3);
+    sizeSquare = +(prompt('Field size', 3));
     showTable();
 }
 
@@ -50,37 +50,39 @@ function readingClassList(arr) {
 
 function turn(i, j) {
     if (boxes[i][j] === null) {
-        number.ofFilled++;
+        filled++;
         boxes[i][j] = player === 'X' ? 'X' : 'O';
         event.target.style.background = player === 'X' ? 'green' : 'red';
         event.target.textContent = player === 'X' ? 'X' : 'O';
-        if (checkWin(player)) {
-            alert('Win ' + player);
-            window.location.reload();
-        } else if (number.ofFilled == sizeSquare * sizeSquare) {
-            alert('New Game');
-            window.location.reload();
-        }
-        player = boxes[i][j] === 'X' ? 'O' : 'X';
-        document.getElementById("player").textContent = 'Player ' + player;
+        setTimeout(function () {
+            if (checkWin(player)) {
+                alert('Win ' + player);
+                window.location.reload();
+            } else if (filled == sizeSquare * sizeSquare) {
+                alert('New Game');
+                window.location.reload();
+            }
+            player = boxes[i][j] === 'X' ? 'O' : 'X';
+            document.getElementById("player").textContent = 'Player ' + player;
+        }, 0);
     }
     console.log(boxes[i][j]);
 }
 
 function checkWin(player) {
-    number.ofDiagonal = 0;
-    number.ofDiagonal1 = 0;
+    var diagonal = 0;
+    var diagonal1 = 0;
     for (var i = 0; i < sizeSquare; i++) {
-        number.ofHorizont = 0;
-        number.ofVertical = 0;
-        if (boxes[i][i] === player) number.ofDiagonal++;
-        if (boxes[i][sizeSquare - 1 - i] === player) number.ofDiagonal1++;
+        var horizont = 0;
+        var vertical = 0;
+        if (boxes[i][i] === player) diagonal++;
+        if (boxes[i][sizeSquare - 1 - i] === player) diagonal1++;
         for (var j = 0; j < sizeSquare; j++) {
-            if (boxes[i][j] === player) number.ofVertical++;
-            if (boxes[j][i] === player) number.ofHorizont++;
+            if (boxes[i][j] === player) horizont++;
+            if (boxes[j][i] === player) vertical++;
         }
-        if (number.ofHorizont == sizeSquare || number.ofVertical == sizeSquare) return true;
+        if (horizont === sizeSquare || vertical === sizeSquare) return true;
     }
-    if (number.ofDiagonal == sizeSquare || number.ofDiagonal1 == sizeSquare) return true;
+    if (diagonal === sizeSquare || diagonal1 === sizeSquare) return true;
     return false;
 }
